@@ -12,7 +12,6 @@
             Masukkan informasi pembelian untuk melihat tingkat kelayakannya.
         </p>
     </div>
-
 </div>
 
 <div class="dashboard-grid">
@@ -38,7 +37,7 @@
                     type="number"
                     name="monthly_allowance"
                     min="1"
-                    value="1500000"
+                    placeholder="Contoh: 1500000"
                     required>
             </label>
 
@@ -48,7 +47,7 @@
                     type="number"
                     name="current_money"
                     min="0"
-                    value="1000000"
+                    placeholder="Contoh: 800000"
                     required>
             </label>
 
@@ -58,7 +57,7 @@
                     type="number"
                     name="item_price"
                     min="0"
-                    value="250000"
+                    placeholder="Contoh: 250000"
                     required>
             </label>
 
@@ -69,7 +68,7 @@
                     name="need_level"
                     min="1"
                     max="10"
-                    value="8"
+                    placeholder="Contoh: 8"
                     required>
             </label>
 
@@ -80,7 +79,7 @@
                     name="days_until_allowance"
                     min="0"
                     max="30"
-                    value="20"
+                    placeholder="Contoh: 20"
                     required>
             </label>
 
@@ -112,45 +111,38 @@
                     <span>Tingkat Kesesuaian</span>
                     <strong id="score"></strong>
                 </div>
-
                 <b id="category"></b>
             </div>
-
 
             <div class="money-grid">
                 <div>
                     <span>Sisa setelah beli</span>
                     <strong id="remaining"></strong>
                 </div>
-
                 <div>
                     <span>Dana harian tersisa</span>
                     <strong id="daily"></strong>
                 </div>
             </div>
 
-<div style="margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap;">
-    <button id="btn-ai" type="button" onclick="mintaAI()" class="button">✨ Rekomendasi AI</button>
-   <a href="{{ route('dashboard') }}" class="button secondary" style="display:inline-flex;align-items:center;gap:.4rem;"><i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Dashboard</a>
-</div>
+            <div style="margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+                <button id="btn-ai" type="button" onclick="mintaAI()" class="button">✨ Rekomendasi AI</button>
+                <a href="{{ route('dashboard') }}" class="button secondary" style="display:inline-flex;align-items:center;gap:.4rem;">
+                    <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Dashboard
+                </a>
+            </div>
 
-            <p
-                id="ai-loading"
-                class="hidden"
+            <p id="ai-loading" class="hidden"
                 style="margin-top:.75rem;color:#6b7280;font-size:.875rem;font-style:italic;">
                 Menghubungi Gemini AI...
             </p>
 
-            <div
-                id="ai-result"
-                class="hidden"
+            <div id="ai-result" class="hidden"
                 style="margin-top:.75rem;background:#f0f7ff;border-left:3px solid #1a73e8;padding:.875rem 1rem;border-radius:.375rem;">
                 <p id="ai-text"></p>
             </div>
 
-            <div
-                id="ai-error"
-                class="hidden"
+            <div id="ai-error" class="hidden"
                 style="margin-top:.75rem;background:#fff0f0;border-left:3px solid #ef4444;padding:.875rem 1rem;border-radius:.375rem;color:#b91c1c;">
             </div>
 
@@ -181,7 +173,6 @@ form.addEventListener('submit', async e => {
     btn.textContent = 'Menghitung...';
     message.classList.add('hidden');
 
-    // Reset area AI setiap submit baru
     ['ai-result', 'ai-error', 'ai-loading'].forEach(id =>
         document.getElementById(id).classList.add('hidden')
     );
@@ -210,29 +201,26 @@ form.addEventListener('submit', async e => {
 
         const r = data.result;
 
-        // Tampilkan hasil
         document.getElementById('empty-result').classList.add('hidden');
         document.getElementById('analysis-result').classList.remove('hidden');
-        document.getElementById('score').textContent    = r.score + '/100';
-        document.getElementById('category').textContent = r.category.replaceAll('_', ' ');
+        document.getElementById('score').textContent     = r.score + '/100';
+        document.getElementById('category').textContent  = r.category.replaceAll('_', ' ');
         document.getElementById('remaining').textContent = rupiah(r.money_after_purchase);
         document.getElementById('daily').textContent     = rupiah(r.daily_budget_after_purchase);
 
         message.textContent = data.message;
         message.className   = 'alert success';
 
-        // Render ulang icon lucide (kalau ada icon di tombol kembali)
         if (window.lucide) lucide.createIcons();
 
-        // Simpan untuk dikirim ke AI
         const fd = new FormData(form);
         lastData = {
-            analysis_id: data.analysis_id,
-            item_name: fd.get('item_name'),
-            item_price: fd.get('item_price'),
-            score: r.score,
-            category: r.category,
-            need_level: fd.get('need_level'),
+            analysis_id:          data.analysis_id,
+            item_name:            fd.get('item_name'),
+            item_price:           fd.get('item_price'),
+            score:                r.score,
+            category:             r.category,
+            need_level:           fd.get('need_level'),
             days_until_allowance: fd.get('days_until_allowance'),
             remaining_percentage: Math.round((fd.get('current_money') / fd.get('monthly_allowance')) * 100),
         };
