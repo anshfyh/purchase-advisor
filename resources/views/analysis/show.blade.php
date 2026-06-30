@@ -29,9 +29,6 @@
         <b>{{ $analysis->category }}</b>
     </div>
 
-    <p class="decision" style="margin-top:1rem;">
-        {{ $analysis->decision }}
-    </p>
 
 </section>
 
@@ -80,16 +77,19 @@
 
     @if($analysis->ai_recommendation)
 
-        <div style="
-            background:#f0f7ff;
-            border-left:4px solid #1a73e8;
-            padding:1rem;
-            border-radius:.5rem;
-            line-height:1.8;
-            margin-bottom:1rem;
-        ">
-            {{ $analysis->ai_recommendation }}
-        </div>
+      <div style="
+    background:#f0f7ff;
+    border-left:4px solid #1a73e8;
+    padding:1rem;
+    border-radius:.5rem;
+    line-height:1.8;
+    margin-bottom:1rem;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+    word-break: break-word;
+">
+{!! nl2br(e(trim($analysis->ai_recommendation))) !!}
+</div>
 
         <button
             id="generate-ai-btn"

@@ -10,13 +10,30 @@ use Illuminate\Http\Request;
 
 class FuzzyResourceController extends Controller
 {
-    public function index(FuzzyTsukamotoService $fuzzy): JsonResponse
-    {
-        return response()->json([
-            'data' => $fuzzy->ruleResource(),
-            'links' => ['calculate' => url('/api/fuzzy/calculate')],
-        ]);
-    }
+public function index(FuzzyTsukamotoService $fuzzy): JsonResponse
+{
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Purchase Advisor REST API',
+        'version' => '1.0',
+        'developer' => 'Ani Shofiyyah Zazqia',
+
+        'resource' => $fuzzy->ruleResource(),
+
+        'endpoints' => [
+            [
+                'method' => 'GET',
+                'url' => url('/api/fuzzy'),
+                'description' => 'Menampilkan informasi metode Fuzzy Tsukamoto beserta rule yang digunakan.',
+            ],
+            [
+                'method' => 'POST',
+                'url' => url('/api/fuzzy/calculate'),
+                'description' => 'Menghitung rekomendasi pembelian berdasarkan data yang dikirim.',
+            ],
+        ],
+    ]);
+}
 
     public function calculate(Request $request, FuzzyTsukamotoService $fuzzy): JsonResponse
     {
